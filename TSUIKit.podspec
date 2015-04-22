@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "TSUIKit"
-  s.version      = "0.1.1"
+  s.version      = "0.1.2"
   s.summary      = "UI components for iOS."
 
   s.description  = <<-DESC
@@ -58,7 +58,7 @@ It provides smooth animations for item selection and dynamic content modificatio
     "Christoph Pageler" => "cp@thepeaklab.com"
   }
   s.platform     = :ios, '5.0'
-  s.source       = { :git => "https://github.com/cpageler93/TSUIKit.git", :tag => "0.1.1" }
+  s.source       = { :git => "https://github.com/cpageler93/TSUIKit.git", :tag => "0.1.2" }
   s.source_files  = 'Classes', 'Classes/**/*.{h,m}'
   s.framework  = 'QuartzCore'
   s.requires_arc = true

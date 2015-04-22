@@ -391,6 +391,7 @@
     UIImage *_cachedExpandSectionBackgroundImage;
     UIImage *_cachedExpandItemNormalBackgroundImage;
     UIImage *_cachedExpandItemSelectedBackgroundImage;
+	dispatch_group_t _addColumnsAndRowsGroup;
 }
 
 @end
@@ -401,6 +402,8 @@
 {
     if(self = [super init])
     {
+		_addColumnsAndRowsGroup = dispatch_group_create();
+		
         _tableView = tableView;
         _tableView.dataSource = self;
         _tableStyle = style;
@@ -438,6 +441,10 @@
 {
     VerboseLog();
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		
+		dispatch_group_wait(_addColumnsAndRowsGroup, DISPATCH_TIME_FOREVER);
+		dispatch_group_enter(_addColumnsAndRowsGroup);
+		
 		[_columns removeAllObjects];
 		[_bottomEndColumns removeAllObjects];
 		[_rows removeAllObjects];
@@ -482,8 +489,11 @@
 				NSAssert(FALSE, @"Type is not supported");
 			}
 		}
+		
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[_tableView reloadData];
+			
+			dispatch_group_leave(_addColumnsAndRowsGroup);
 		});
 	});
 }
