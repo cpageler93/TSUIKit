@@ -437,51 +437,55 @@
 - (void)setColumns:(NSArray *)columns andRows:(NSArray *)rows
 {
     VerboseLog();
-    [_columns removeAllObjects];
-    [_bottomEndColumns removeAllObjects];
-    [_rows removeAllObjects];
-    
-    for(id columnInfo in columns)
-    {
-        if([columnInfo isKindOfClass:[TSColumn class]])
-        {
-            [_columns addObject:columnInfo];
-        }
-        else if([columnInfo isKindOfClass:[NSString class]])
-        {
-            [_columns addObject:[[TSColumn alloc] initWithTitle:columnInfo]];
-        }
-        else if([columnInfo isKindOfClass:[NSDictionary class]])
-        {
-            [_columns addObject:[TSColumn columnWithDictionary:columnInfo]];
-        }
-        else
-        {
-            NSAssert(FALSE, @"Type is not supported");
-        }
-        [self addLeafColumnsFrom:[_columns lastObject]];
-    }
-    
-    for(id rowInfo in rows)
-    {
-        if([rowInfo isKindOfClass:[TSRow class]])
-        {
-            [_rows addObject:rowInfo];
-        }
-        else if([rowInfo isKindOfClass:[NSArray class]])
-        {
-            [_rows addObject:[[TSRow alloc] initWithCells:rowInfo]];
-        }
-        else if([rowInfo isKindOfClass:[NSDictionary class]])
-        {
-            [_rows addObject:[TSRow rowWithDictionary:rowInfo]];
-        }
-        else
-        {
-            NSAssert(FALSE, @"Type is not supported");
-        }
-    }
-    [_tableView reloadData];
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		[_columns removeAllObjects];
+		[_bottomEndColumns removeAllObjects];
+		[_rows removeAllObjects];
+		
+		for(id columnInfo in columns)
+		{
+			if([columnInfo isKindOfClass:[TSColumn class]])
+			{
+				[_columns addObject:columnInfo];
+			}
+			else if([columnInfo isKindOfClass:[NSString class]])
+			{
+				[_columns addObject:[[TSColumn alloc] initWithTitle:columnInfo]];
+			}
+			else if([columnInfo isKindOfClass:[NSDictionary class]])
+			{
+				[_columns addObject:[TSColumn columnWithDictionary:columnInfo]];
+			}
+			else
+			{
+				NSAssert(FALSE, @"Type is not supported");
+			}
+			[self addLeafColumnsFrom:[_columns lastObject]];
+		}
+		
+		for(id rowInfo in rows)
+		{
+			if([rowInfo isKindOfClass:[TSRow class]])
+			{
+				[_rows addObject:rowInfo];
+			}
+			else if([rowInfo isKindOfClass:[NSArray class]])
+			{
+				[_rows addObject:[[TSRow alloc] initWithCells:rowInfo]];
+			}
+			else if([rowInfo isKindOfClass:[NSDictionary class]])
+			{
+				[_rows addObject:[TSRow rowWithDictionary:rowInfo]];
+			}
+			else
+			{
+				NSAssert(FALSE, @"Type is not supported");
+			}
+		}
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[_tableView reloadData];
+		});
+	});
 }
 
 - (void)addLeafColumnsFrom:(TSColumn *)parentColumn
