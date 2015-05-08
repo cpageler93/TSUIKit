@@ -381,9 +381,9 @@
 {
     TSNavigationStripSection *section = _sections[index];
     if(selected)
-        return [section.selectedTitle sizeWithFont:section.selectedFont].width + 2 * _navigationStrip.bounds.size.height;
+		return [section.selectedTitle sizeWithAttributes:@{NSFontAttributeName: section.selectedFont}].width + 2 * _navigationStrip.bounds.size.height;
     else
-        return [section.title sizeWithFont:section.font].width + 2 * _navigationStrip.bounds.size.height;
+		return [section.title sizeWithAttributes:@{NSFontAttributeName: section.font}].width + 2 * _navigationStrip.bounds.size.height;
 }
 
 - (UIFont *)titleFontForSectionAtIndex:(NSInteger)index forSelectedState:(BOOL)selected
@@ -466,9 +466,9 @@
 {
     TSNavigationStripItem *item = (leftSide ? _leftItems[index] : _rightItems[index]);
     if(selected)
-        return [item.selectedTitle sizeWithFont:item.selectedFont].width + _navigationStrip.bounds.size.height;
+		return [item.selectedTitle sizeWithAttributes:@{NSFontAttributeName: item.selectedFont}].width + _navigationStrip.bounds.size.height;
     else
-        return [item.title sizeWithFont:item.font].width + _navigationStrip.bounds.size.height;
+		return [item.title sizeWithAttributes:@{NSFontAttributeName: item.font}].width + _navigationStrip.bounds.size.height;
 }
 
 - (UIImage *)backgroundImageForItemAtIndex:(NSInteger)index fromLeftSide:(BOOL)leftSide forSelectedState:(BOOL)selected
